@@ -314,9 +314,9 @@ public:
     std::string readClass(const cv::FileNode &fn, const std::string &class_id_override = "");
     void writeClass(const std::string &class_id, cv::FileStorage &fs) const;
 
-    void readClasses(const std::vector<std::string> &class_ids,
+    void readClasses(const std::string& model_path, const std::vector<std::string> &class_ids,
                                      const std::string &format = "templates_%s.yml.gz");
-    void writeClasses(const std::string &format = "templates_%s.yml.gz") const;
+    void writeClasses(const std::string& model_path, const std::string &format = "templates_%s.yml.gz") const;
 
     bool split_class_templates(const std::vector<std::string>& class_ids,  int scale_number = 1, int angle_number = 1);
 

@@ -1870,14 +1870,14 @@ void Detector::writeClass(const std::string &class_id, cv::FileStorage &fs) cons
     fs << "]"; // pyramids
 }
 
-void Detector::readClasses(const std::vector<std::string> &class_ids,
+void Detector::readClasses(const std::string& model_path, const std::vector<std::string> &class_ids,
                            const std::string &format)
 {
 
     for (size_t i = 0; i < class_ids.size(); ++i)
     {
         const cv::String &class_id = class_ids[i];
-        std::string model_name = "/home/seeking/test_projects/nkrlib/linemode_template_match/datas/" + class_id + "_" + format + ".yaml";
+        std::string model_name = model_path + class_id + "_" + format + ".yaml";
         if (!class_id.empty() && boost::filesystem::exists( model_name ))
         {
             cv::String filename = cv::format(model_name.c_str());
@@ -1887,14 +1887,14 @@ void Detector::readClasses(const std::vector<std::string> &class_ids,
     }
 }
 
-void Detector::writeClasses(const std::string &format) const
+void Detector::writeClasses(const std::string& model_path, const std::string &format) const
 {
 
     TemplatesMap::const_iterator it = class_templates.begin(), it_end = class_templates.end();
     for (; it != it_end; ++it)
     {
         const cv::String &class_id = it->first;
-        std::string model_name = "/home/seeking/test_projects/nkrlib/linemode_template_match/datas/" + class_id + "_" + format + ".yaml";
+        std::string model_name = model_path + class_id + "_" + format + ".yaml";
         cv::String filename = cv::format(model_name.c_str());
         cv::FileStorage fs(filename, cv::FileStorage::WRITE);
         writeClass(class_id, fs);

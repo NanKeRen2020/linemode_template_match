@@ -11,12 +11,12 @@ int main(int argc, char* argv[])
     cv::Mat to_recognize = cv::imread(argv[1]);
     if (to_recognize.channels() == 3)
         cv::cvtColor(to_recognize, to_recognize, cv::COLOR_BGR2GRAY);     
-
+    std::string model_path = std::string(argv[2]);
     // 多尺度模板，匹配定位加速
-    Linemode_Template_Match linemode_match_loc(128, {2}, {0, 1}, 2, {0.5, 1.0}, 0.5, {"test_loc"}, "test_loc", 10, 10);
+    Linemode_Template_Match linemode_match_loc(128, {2}, {0, 1}, 2, {0.5, 1.0}, 0.5, model_path, {"test_loc"}, "test_loc", 10, 10);
 
     // 多模板匹配识别，图像分辨率不够时无法开启多尺度加速
-    Linemode_Template_Match linemode_match_ocr(128, {2}, {0, 1}, 2, {1.0, 1.5}, 2.5, {"test_ocr"}, "test_ocr", 10, 10);
+    Linemode_Template_Match linemode_match_ocr(128, {2}, {0, 1}, 2, {1.0, 1.5}, 2.5, model_path, {"test_ocr"}, "test_ocr", 10, 10);
     
     // 设置与模板图像字符对应的label
     linemode_match_ocr.set_labels({
@@ -28,12 +28,14 @@ int main(int argc, char* argv[])
     cv::Rect match_roi;
     std::vector<cv::Rect> match_rois;
     std::string result;
+
     
-    if (std::string(argv[2]) == "loc")
+    
+    if (std::string(argv[3]) == "loc")
     {
         // detect the location 
         if (!linemode_match_loc.is_loaded("test_loc"))
-           linemode_match_loc.train_model(argv[3], {"test_loc"}, "test_loc");
+           linemode_match_loc.train_model(argv[4], model_path, {"test_loc"}, "test_loc");
 
         linemode_match_loc.recognize(to_recognize, {"test_loc"}, 80, match_roi, true);
         
@@ -48,7 +50,7 @@ int main(int argc, char* argv[])
     {
         // recognize the chars 
         if (!linemode_match_ocr.is_loaded("test_ocr"))
-           linemode_match_ocr.train_model(argv[3], {"test_ocr"}, "test_ocr");
+           linemode_match_ocr.train_model(argv[4], model_path, {"test_ocr"}, "test_ocr");
         
         result = linemode_match_ocr.recognize(to_recognize, {"test_ocr"}, 70, 0.8, 0, match_rois);
         std::cout << "ocr result: " << result << std::endl;
