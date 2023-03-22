@@ -5,11 +5,11 @@ This project recognize single & multiple object using linemode shape template.
 
 You can get the object location by recognizing given object template. 
 
-I employ the multi-scale approach to accelerate main computationally intensive part 
+I employ the multi-scale approach to accelerate the main computationally intensive part 
 
 of the match procedure. To be precise, i reduce the amount of computation of response
 
-map, can reduce the running time to 1/3 of origial. In face, the running time is 
+map, which can reduce the running time to 1/3 of origial. In fact, the running time is 
 
 ~4ms with 300*200 matching image and 100*90 template image on ubuntu1604 
 
@@ -44,21 +44,23 @@ Build & Usage
 cd linemode_template_match
 
 mkdir build
+
 cmake ..
+
 make -j8
 
 ./linemode_match_test path_to/datas/row_text_originals0 path_to/datas/ ocr path_to/datas/edges
 
 
-recognize the location of chars of image
+recognize & get the location of chars of image
 
 ![image](https://github.com/NanKeRen2020/linemode_template_match/blob/main/datas/to_match0.png)
 
-recognize the location of chars of image
+recognize & get the location of chars of image
 
 ![image](https://github.com/NanKeRen2020/linemode_template_match/blob/main/datas/to_match1.png)
 
-match the location of the template of image
+match the location of the template on image
 
 ![image](https://github.com/NanKeRen2020/linemode_template_match/blob/main/datas/locate_text_area.png)
 
