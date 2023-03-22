@@ -399,32 +399,7 @@ std::string Linemode_Template_Match::recognize(const cv::Mat& to_match, const st
     std::sort(matches.begin(), matches.end(), 
               [](const line2Dup::Match match1, const line2Dup::Match match2)
                 { return match1.similarity > match2.similarity;});     
-    int max_sim_match_size = m_detector.getTemplates(matches[0].class_id, matches[0].template_id)[0].features.size();
 
-    for (int i = 0; i < matches.size(); ++i)
-    {
-        std::cout << m_detector.getTemplates(matches[i].class_id, matches[i].template_id)[0].features.size() 
-                  << ", " << matches[i].similarity << ", ";
-    }
-    std::cout << std::endl;
-
-    // 统计前20相似度match的特征点长度
-    std::map<int, int> size_counts;
-    int max_size = (matches.size() > 20) ? 20 : matches.size();
-    for (auto it = matches.begin(); it != matches.begin() + max_size; ++it)
-    {
-        int match_feature_size = m_detector.getTemplates(it->class_id, it->template_id)[0].features.size();
-        if (size_counts.find(match_feature_size) == size_counts.end())
-        {
-            size_counts.insert({match_feature_size, 1});
-
-        }
-        else ++size_counts[match_feature_size];    // 递增某个特征长度的计数
-    }
-
-    std::vector<std::pair<int, int>> size_count_vec(size_counts.begin(), size_counts.end());
-    std::sort(size_count_vec.begin(), size_count_vec.end(), [](const std::pair<int, int>& sc1, const std::pair<int, int>& sc2)
-                                 {  return sc1.second > sc2.second; });
     auto it = matches.begin();
     auto templ = m_detector.getTemplates(it->class_id, it->template_id);
     
