@@ -1,5 +1,5 @@
-#ifndef STD_UTILS_H
-#define STD_UTILS_H
+#ifndef UTILS_H
+#define UTILS_H
 
 #include <opencv2/opencv.hpp>
 #include <boost/filesystem.hpp> 
