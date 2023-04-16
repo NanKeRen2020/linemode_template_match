@@ -10,7 +10,7 @@
 #include <sys/stat.h>
 #include <dirent.h>
 
-#include "std_utils.h"
+#include "utils.h"
 
 
 bool check_roi_valid(cv::Rect& roi, int width, int height)
@@ -157,8 +157,10 @@ float clarity_estimate(const cv::Mat& image)
 //----------------------------------------------------------------- limode match --------------------------------------------
 
 Linemode_Template_Match::Linemode_Template_Match(const std::vector<int>& pyr_stride, const std::vector<float>& angle_range, float angle_step, 
-                    const std::vector<float>& scale_range, float scale_step, const std::string& model_path, const std::vector<std::string>& class_ids, const std::string& template_model_name): 
-                    m_pyr_stride(pyr_stride), m_angle_range(angle_range), m_angle_step(angle_step), m_scale_range(scale_range), m_scale_step(scale_step),
+                    const std::vector<float>& scale_range, float scale_step, const std::string& model_path, 
+                    const std::vector<std::string>& class_ids, const std::string& template_model_name): 
+                    m_pyr_stride(pyr_stride), m_angle_range(angle_range), m_angle_step(angle_step), 
+                    m_scale_range(scale_range), m_scale_step(scale_step),
                     m_weak_thresh(0), m_strong_thresh(80), m_detector(line2Dup::Detector(64, pyr_stride, 0, 80))
 {
     if (!class_ids.empty() && !template_model_name.empty())
@@ -176,8 +178,9 @@ Linemode_Template_Match::Linemode_Template_Match(const std::vector<int>& pyr_str
 
 }
 
-Linemode_Template_Match::Linemode_Template_Match(int feature_number, const std::vector<int>& pyr_stride, const std::vector<float>& angle_range, float angle_step, 
-                     const std::vector<float>& scale_range, float scale_step, const std::string& model_path, const std::vector<std::string>& class_ids, const std::string& template_model_name,
+Linemode_Template_Match::Linemode_Template_Match(int feature_number, const std::vector<int>& pyr_stride, const std::vector<float>& angle_range, 
+                     float angle_step, const std::vector<float>& scale_range, float scale_step, const std::string& model_path, 
+                     const std::vector<std::string>& class_ids, const std::string& template_model_name,
                      int weak_thresh, int strong_thresh ): m_pyr_stride(pyr_stride), m_angle_range(angle_range), m_angle_step(angle_step),
                      m_scale_range(scale_range), m_scale_step(scale_step), m_strong_thresh(strong_thresh), m_weak_thresh(weak_thresh), 
                      m_feature_number(feature_number), m_detector(line2Dup::Detector(feature_number, pyr_stride, weak_thresh, strong_thresh)) 
@@ -196,7 +199,8 @@ Linemode_Template_Match::Linemode_Template_Match(int feature_number, const std::
     m_detector.split_class_templates(class_ids, m_scale_number, m_shapes.infos.size()/m_scale_number);
 }
 
-void Linemode_Template_Match::load_model(const std::string& model_path, const std::vector<std::string>& class_ids, const std::string& template_model_name)
+void Linemode_Template_Match::load_model(const std::string& model_path, const std::vector<std::string>& class_ids, 
+                                         const std::string& template_model_name)
 {
     if (!class_ids.empty() && !template_model_name.empty())
     m_detector.readClasses(model_path, class_ids, template_model_name);
@@ -206,7 +210,8 @@ void Linemode_Template_Match::load_model(const std::string& model_path, const st
 }
 
 
-bool Linemode_Template_Match::train_model(const cv::Mat& template_image, const std::string& model_path, const std::string& class_id, const std::string& template_model_name)
+bool Linemode_Template_Match::train_model(const cv::Mat& template_image, const std::string& model_path, 
+                                          const std::string& class_id, const std::string& template_model_name)
 {
  
     delete_model({class_id});
@@ -256,7 +261,7 @@ bool Linemode_Template_Match::train_model(const cv::Mat& template_image, const s
 
     // save templates
     m_detector.writeClasses(model_path, template_model_name);
-    m_shapes.save_infos(infos_have_templ, "./models/" + class_id  + "_" + template_model_name + "_infos.yaml");
+    m_shapes.save_infos(infos_have_templ, model_path + class_id  + "_" + template_model_name + "_infos.yaml");
 
     return true;
 
@@ -276,7 +281,8 @@ void Linemode_Template_Match::read_labels(const std::string& template_image_path
     }    
 }
 
-bool Linemode_Template_Match::train_model(const std::string& template_image_path, const std::string& model_path, const std::string& class_id, const std::string& template_model_name)
+bool Linemode_Template_Match::train_model(const std::string& template_image_path, const std::string& model_path, 
+                                          const std::string& class_id, const std::string& template_model_name)
 {
     // 删除已有模板
     delete_model({class_id});
@@ -321,6 +327,7 @@ bool Linemode_Template_Match::train_model(const std::string& template_image_path
         }
 
     }
+
     // 多尺度加速分割顶层和底层模板
     m_detector.split_class_templates({class_id}, m_scale_number, m_shapes.infos.size()/m_scale_number);
 

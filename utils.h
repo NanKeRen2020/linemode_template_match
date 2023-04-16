@@ -45,10 +45,12 @@ Linemode_Template_Match(const std::vector<int>& pyr_stride, const std::vector<fl
                         const std::vector<std::string>& class_ids, const std::string& template_model_name);
 
 Linemode_Template_Match(int feature_number, const std::vector<int>& pyr_stride, const std::vector<float>& angle_range, float angle_step, 
-                        const std::vector<float>& scale_range, float scale_step, const std::string& model_path, const std::vector<std::string>& class_ids, 
-                        const std::string& template_model_name, int weak_thresh = 0, int strong_thresh = 80);
+                        const std::vector<float>& scale_range, float scale_step, const std::string& model_path, 
+                        const std::vector<std::string>& class_ids, const std::string& template_model_name, 
+                        int weak_thresh = 0, int strong_thresh = 80);
 
-void load_model(const std::string& model_path, const std::vector<std::string>& class_ids, const std::string& template_model_name);
+void load_model(const std::string& model_path, const std::vector<std::string>& class_ids, 
+                const std::string& template_model_name);
 
 void set_labels(const std::map<int, std::string> labels) { index_char = labels; }
 
@@ -56,9 +58,11 @@ void read_labels(const std::string& template_image_path);
 
 bool is_loaded(const std::string& class_id) { return m_detector.isLoaded(class_id); }
 
-bool train_model(const std::string& template_image_path, const std::string& model_path, const std::string& class_id, const std::string& template_model_name);
+bool train_model(const std::string& template_image_path, const std::string& model_path, 
+                 const std::string& class_id, const std::string& template_model_name);
 
-bool train_model(const cv::Mat& template_image, const std::string& model_path, const std::string& class_id, const std::string& template_model_name);
+bool train_model(const cv::Mat& template_image, const std::string& model_path, 
+                 const std::string& class_id, const std::string& template_model_name);
 
 bool delete_model(const std::vector<std::string>& class_ids) { return m_detector.removeTemplate(class_ids); }
 
@@ -67,12 +71,13 @@ bool recognize(const cv::Mat& to_match, const std::vector<std::string>& class_id
                cv::Rect& match_roi, bool pyramid_acc = true);
 
 // 单字符形状匹配识别
-std::string recognize(const cv::Mat& to_match, const std::vector<std::string>& class_ids, int match_similarity_thresh, bool pyramid_acc = false);
+std::string recognize(const cv::Mat& to_match, const std::vector<std::string>& class_ids, 
+                      int match_similarity_thresh, bool pyramid_acc = false);
 
 // 字符行形状匹配识别
 std::string recognize(const cv::Mat& to_match, const std::vector<std::string>& class_ids, int match_similarity_thresh,
-                      int nms_similarity_thresh, float num_iou_thresh, std::vector<cv::Rect>& match_rois, bool pyramid_acc = false, 
-                      const std::vector<cv::Rect>& mask_roi = std::vector<cv::Rect>() );
+                      int nms_similarity_thresh, float num_iou_thresh, std::vector<cv::Rect>& match_rois, 
+                      bool pyramid_acc = false, const std::vector<cv::Rect>& mask_roi = std::vector<cv::Rect>() );
 
 private:
 

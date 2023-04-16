@@ -3,7 +3,7 @@
 #include <numeric>
 #include <future>
 #include <thread>
-#include "std_utils.h"
+#include "utils.h"
 
 int main(int argc, char* argv[])
 {
@@ -12,6 +12,7 @@ int main(int argc, char* argv[])
     if (to_recognize.channels() == 3)
         cv::cvtColor(to_recognize, to_recognize, cv::COLOR_BGR2GRAY);     
     std::string model_path = std::string(argv[2]);
+
     // 多尺度模板，匹配定位加速
     Linemode_Template_Match linemode_match_loc(128, {2}, {0, 1}, 2, {0.5, 1.0}, 0.5, model_path, {"test_loc"}, "test_loc", 10, 10);
 
@@ -29,13 +30,12 @@ int main(int argc, char* argv[])
     std::vector<cv::Rect> match_rois;
     std::string result;
 
-    
-    
     if (std::string(argv[3]) == "loc")
     {
         // detect the location 
+        cv::Mat train_image = cv::imread(argv[4]);
         if (!linemode_match_loc.is_loaded("test_loc"))
-           linemode_match_loc.train_model(argv[4], model_path, {"test_loc"}, "test_loc");
+           linemode_match_loc.train_model(train_image, model_path, {"test_loc"}, "test_loc");
 
         linemode_match_loc.recognize(to_recognize, {"test_loc"}, 80, match_roi, true);
         

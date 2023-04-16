@@ -45,6 +45,6 @@ add_subdirectory(./linemode_match/cuda_icp)
 
 
 # test exe
-add_executable(${PROJECT_NAME}_test test_match.cpp std_utils.cpp  ${LINEMODE_FILES})
+add_executable(${PROJECT_NAME}_test test_match.cpp utils.cpp  ${LINEMODE_FILES})
 target_link_libraries(${PROJECT_NAME}_test ${OpenCV_LIBS} cuda_icp -ldl -lstdc++fs -lboost_system -lboost_filesystem)
 
